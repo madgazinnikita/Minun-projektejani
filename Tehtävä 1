@@ -1,0 +1,65 @@
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
+void calculate_tile_cost(float area, float tileCost, float tileArea) {
+int quantity = area / tileArea;
+float totalCost = quantity * tileCost;
+float extraArea = area - quantity * tileArea;
+if (extraArea > 0) {
+quantity++;
+totalCost += tileCost;
+}
+cout « "Возможно приобрести плиток: " « quantity « ". Общая стоимость составляет " « totalCost « " руб." « endl;
+cout « fixed « setprecision(2) « "Лишняя площадь плитки составит: " « quantity*tileArea-area « " кв. см" « endl;
+}
+
+void calculate_tile_area(float money, float tileCost, float tileArea) {
+int quantity = money / tileCost;
+float area = quantity * tileArea;
+float remainingMoney = money - quantity * tileCost;
+cout « "Возможно приобрести: " « area « " кв. м плитки на предложенную сумму." « endl ;
+cout « "Остаток: " « remainingMoney « " руб." « endl;
+}
+
+int main() {
+int choice;
+float input, tileCost, tileArea;
+
+cout « "Введите цену одной плитки в руб: ";
+cin » tileCost;
+cout « "Введите площадь одной плитки в кв. см: ";
+cin » tileArea;
+
+if (tileCost <= 0 || tileArea <= 0) {
+cout « "Ошибка: введено отрицательное число." « endl;
+return 1;
+}
+
+cout « "Выберите опцию: " « endl;
+cout « "1. Рассчитать стоимость плитки в рублях на площадь в кв. м" « endl;
+cout « "2. Рассчитать площадь плитки в кв. м за сумму денег в руб." « endl;
+cin » choice;
+
+if (choice == 1) {
+cout « "Введите площадь в кв м: ";
+cin » input;
+if (input <= 0) {
+cout « "Ошибка: введено отрицательное число." « endl;
+return 1;
+}
+calculate_tile_cost(input, tileCost, tileArea);
+} else if (choice == 2) {
+cout « "Введите сумму денег в руб: ";
+cin » input;
+if (input <= 0) {
+cout « "Ошибка: введено отрицательное число." « endl;
+return 1;
+}
+calculate_tile_area(input, tileCost, tileArea);
+} else {
+cout « "Неверный выбор." « endl;
+}
+
+return 0;
+}
