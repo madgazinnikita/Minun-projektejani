@@ -1,0 +1,95 @@
+#include <iostream>
+#include <cmath>
+#include <vector>
+
+using namespace std;
+
+// Функция для решения квадратного уравнения
+vector<double> solveQuadraticEquation(double a, double b, double c) {
+    vector<double> roots;
+
+    double discriminant = b * b - 4 * a * c;
+
+    if (discriminant > 0) {
+        roots.push_back((-b + sqrt(discriminant)) / (2 * a));
+        roots.push_back((-b - sqrt(discriminant)) / (2 * a));
+    } else if (discriminant == 0) {
+        roots.push_back(-b / (2 * a));
+    }
+
+    return roots;
+}
+
+// Функция для вывода уравнения
+void printEquation(int a, int b, int c) {
+    cout << "Уравнение: ";
+    if (a != 0) {
+        cout << (a == 1 ? "" : to_string(a)) << "x^2 ";
+    }
+    if (b != 0) {
+        cout << (b == 1 ? "+" : (b == -1 ? "-" : to_string(b))) << "x ";
+    }
+    if (c != 0) {
+        cout << (c > 0 ? "+" : "") << c;
+    }
+    cout << " = 0" << endl;
+}
+
+// Функция для поиска уравнений с определенным корнем в заданном диапазоне коэффициентов
+void findEquationsWithRoot(double targetRoot, int coefficientRange) {
+    for (int a = -coefficientRange; a <= coefficientRange; ++a) {
+        for (int b = -coefficientRange; b <= coefficientRange; ++b) {
+            for (int c = -coefficientRange; c <= coefficientRange; ++c) {
+                vector<double> roots = solveQuadraticEquation(a, b, c);
+                for (double root : roots) {
+                    if (root == targetRoot) {
+                        printEquation(a, b, c);
+                    }
+                }
+            }
+        }
+    }
+}
+
+int main() {
+    cout << "Выберите действие:\n";
+    cout << "1. Решение квадратного уравнения\n";
+    cout << "2. Поиск уравнений с заданным корнем\n";
+
+    int choice;
+    cin >> choice;
+
+    if (choice == 1) {
+        double a, b, c;
+        cout << "Введите коэффициенты a, b, c для квадратного уравнения: ";
+        cin >> a >> b >> c;
+
+        vector<double> roots = solveQuadraticEquation(a, b, c);
+
+        if (roots.empty()) {
+            cout << "Уравнение не имеет корней." << endl;
+        } else {
+            cout << "Корни уравнения: ";
+            for (double root : roots) {
+                cout << root << " ";
+            }
+            cout << endl;
+        }
+    } else if (choice == 2) {
+        double targetRoot;
+        int lowerLimit, upperLimit;
+
+        cout << "Введите корень для поиска уравнений: ";
+        cin >> targetRoot;
+
+        cout << "Введите нижнюю и верхнюю границы диапазона коэффициентов: ";
+        cin >> lowerLimit >> upperLimit;
+
+        cout << "Уравнения с корнем " << targetRoot << " в диапазоне [" << lowerLimit << "; " << upperLimit << "]:" << endl;
+        findEquationsWithRoot(targetRoot, max(abs(lowerLimit), abs(upperLimit)));
+    } else {
+        cout << "Неверный выбор." << endl;
+    }
+
+    return 0;
+}
