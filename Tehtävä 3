@@ -1,0 +1,97 @@
+#include <iostream>
+#include <stdexcept>  // Добавляем заголовочный файл для исключений
+
+using namespace std;
+
+float calculateTileCost(float area, float tilePrice) {
+    return area * tilePrice;
+}
+
+float calculateWallpaperCost(float wallArea, float wallpaperPrice) {
+    return wallArea * wallpaperPrice;
+}
+
+int main() {
+    try {
+        int choice;
+        int numRooms;
+        float tilePrice, wallpaperPrice;
+        float totalTileCost = 0;
+        float totalWallpaperCost = 0;
+
+        cout << "Введите количество комнат: ";
+        cin >> numRooms;
+
+        if (numRooms <= 0) {
+            throw invalid_argument("Количество комнат должно быть положительным числом.");
+        }
+
+        for (int i = 1; i <= numRooms; i++) {
+            cout << "Комната " << i << endl;
+
+            cout << "Выберите опцию:\n";
+            cout << "1. Расчет стоимости плитки на площадь помещения\n";
+            cout << "2. Расчет стоимости обоев на площадь стены\n";
+            cout << "3. Расчет обоев и плитки одновременно\n";
+            cout << "Введите ваш выбор (1-3): ";
+            cin >> choice;
+
+            if (choice != 1 && choice != 2 && choice != 3) {
+                throw invalid_argument("Некорректный выбор опции.");
+            }
+
+            if (choice == 1 || choice == 3) {
+                float area;
+                cout << "Введите площадь помещения (в квадратных метрах): ";
+                cin >> area;
+
+                if (area < 0) {
+                    throw invalid_argument("Площадь помещения не может быть отрицательной.");
+                }
+
+                cout << "Введите стоимость плитки за квадратный метр: ";
+                cin >> tilePrice;
+                
+                if (tilePrice < 0) {
+                    throw invalid_argument("Стоимость плитки не может быть отрицательной.");
+                }
+
+                float tileCost = calculateTileCost(area, tilePrice);
+                cout << "Стоимость плитки на площадь помещения: " << tileCost << " руб.\n";
+                totalTileCost += tileCost;
+            }
+
+            if (choice == 2 || choice == 3) {
+                float wallArea;
+                cout << "Введите площадь стены (в квадратных метрах): ";
+                cin >> wallArea;
+
+                if (wallArea < 0) {
+                    throw invalid_argument("Площадь стены не может быть отрицательной.");
+                }
+
+                cout << "Введите стоимость обоев за квадратный метр: ";
+                cin >> wallpaperPrice;
+                
+                if (wallpaperPrice < 0) {
+                    throw invalid_argument("Стоимость обоев не может быть отрицательной.");
+                }
+
+                float wallpaperCost = calculateWallpaperCost(wallArea, wallpaperPrice);
+                cout << "Стоимость обоев на площадь стены: " << wallpaperCost << " руб.\n";
+                totalWallpaperCost += wallpaperCost;
+            }
+        }
+
+        cout << "Общая стоимость плитки для всех комнат: " << totalTileCost << " руб.\n";
+        cout << "Общая стоимость обоев для всех комнат: " << totalWallpaperCost << " руб.\n";
+    } catch (const invalid_argument& e) {
+        cerr << "Ошибка: " << e.what() << endl;
+        return 1;  // Возвращаем ненулевой код, чтобы указать наличие ошибки
+    } catch (...) {
+        cerr << "Произошла неизвестная ошибка." << endl;
+        return 1;
+    }
+
+    return 0;
+}
